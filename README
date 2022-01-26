@@ -1,0 +1,8 @@
+todo
+----------
+
+Todo list application for CLI. I wanted something that didn't require a God damn web browser or GTk3333333 to use. I've done a few iterations over the years and settled on C++ for now. I'm sure I'll do it in Assembly or Nim but for now C++ is fine. 
+
+Usage:
+
+Need make installed. Run make and then throw the executable in your $PATH somewhere. Type todo help for usage. 
