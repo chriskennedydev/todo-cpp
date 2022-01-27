@@ -1,4 +1,3 @@
-#include <iostream>
 #include <string>
 #include <filesystem>
 #include <fstream>
@@ -16,7 +15,7 @@ int main(int argc, char** argv)
 {
 	if (argc == 1)
 	{
-		cout << "Need at least one argument!" << endl;
+		printf("Need at least one argument!\n");
 		return 1;
 	}
 
@@ -35,18 +34,14 @@ int main(int argc, char** argv)
 	// convert first arg to string for compare
 	string cmd = argv[1];
 
-	if (cmd == "test")
-	{
-		cout << "File is " << work_dir << endl;
-	}
-	else if (cmd == "add")
+	if (cmd == "add")
 	{
 		add(argc, argv, work_dir);
 	}
 	else if (cmd == "list") 
 	{
-		cout << "Todo List" << endl;
-		cout << "---------" << endl;
+		printf("Todo List\n");
+		printf("---------\n");
 		list(work_dir);
 	}
 	else if (cmd == "del")
@@ -149,7 +144,7 @@ void list(filesystem::path todo_file)
 
 	while (getline(todo_reader, todo)) 
 	{
-		cout << todo_num << ". " << todo << endl;
+		printf("%d. %s\n", todo_num, todo.c_str());	
 		todo_num++;
 	}
 	todo_reader.close();
@@ -157,10 +152,10 @@ void list(filesystem::path todo_file)
 
 void usage()
 {
-	cout << "usage: todo cmd arg(s)" << endl;
-	cout << "cmd: add | del | update | list" << endl;
-	cout << "add: todo add <my todo to add>" << endl;
-	cout << "del: todo del <todo's number>" << endl;
-	cout << "update: todo update <todo's number> <updated todo>" << endl;
-	cout << "list: todo list" << endl;
+	printf("usage: todo cmd arg(s)\n");
+	printf("cmd: add | del | update | list\n");
+	printf("add: todo add <my todo to add>\n");
+	printf("del: todo del <todo's number>\n");
+	printf("update: todo update <todo's number> <updated todo>\n");
+	printf("list: todo list\n");
 }
