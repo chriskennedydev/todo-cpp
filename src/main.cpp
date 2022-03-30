@@ -153,7 +153,7 @@ void done(int todo_num, std::filesystem::path todo_file)
     {
 	if (todo_index == todo_num)
 	{
-	    todo += "\u221A";
+	    todo += "✓";
 	    todos.push_back(todo);
 	}
 	else
