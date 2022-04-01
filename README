@@ -1,8 +1,37 @@
 todo
 ----------
 
-Todo list application for CLI. I wanted something that didn't require a God damn web browser or GTk3333333 to use. I've done a few iterations over the years and settled on C++ for now. I'm sure I'll do it in Assembly or Nim but for now C++ is fine. 
+Todo list application for CLI. I wanted something that didn't require a God damn web browser or GTk3333333 to use. I've done a few iterations over the years and settled on C++ for now. I'm sure I'll do it in Assembly or Nim but for now C++ is fine.
+Installing:
+
+Need make installed
+
+https://www.gnu.org/software/make/
+
+After that you can run the following:
+
+make -- Run make for debug builds. This will create a ./bin/todo directory and file.
+
+make release -- Run make release to build a stripped binary. This will create a ./pkg/todo directory and file.
+
+make install -- This will install the RELEASE binary in /usr/local/bin/. Make sure this is in your $PATH before running.
+
+make clean -- This will delete the ./bin/ directory.
 
 Usage:
+You can always run "todo help" to get a better breakdown of this on the command line.
 
-Need make installed. Run make and then throw the executable in your $PATH somewhere. Type todo help for usage. 
+Basic overview -- todo cmd args
+cmd -- add | done | update | delete | list
+args -- todo to add | todo to complete | todo to update | todo to delete | list all todos
+
+Examples:
+
+todo add Write more C
+todo update 1 Write a lot more C
+todo add Setup new project repos
+todo done 2
+todo list
+todo del 2
+
+

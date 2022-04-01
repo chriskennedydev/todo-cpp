@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <fstream>
 #include <vector>
+#include <iostream>
 
 void add(int todo_length, char** todo, std::filesystem::path todo_file);
 void del(int todo_num, std::filesystem::path todo_file);
@@ -45,17 +46,23 @@ int main(int argc, char** argv)
     }
     else if (cmd == "del")
     {
-	int todo_num = atoi(argv[2]);
+	char *int_conversion = argv[2];
+	char *end_ptr;
+	unsigned int todo_num = strtol(int_conversion, &end_ptr, 0);
 	del(todo_num, work_dir);
     }
     else if (cmd == "update") 
     {
-	int todo_num = atoi(argv[2]);
+	char *int_conversion = argv[2];
+	char *end_ptr;
+	int todo_num = strtol(int_conversion, &end_ptr, 0);
 	update(argc, todo_num, argv, work_dir);
     }
     else if (cmd == "done")
     {
-	int todo_num = atoi(argv[2]);
+	char *int_conversion = argv[2];
+	char *end_ptr;
+	int todo_num = strtol(int_conversion, &end_ptr, 0);
 	done(todo_num, work_dir);
 	
     }
