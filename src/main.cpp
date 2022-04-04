@@ -1,3 +1,6 @@
+#define RESET "\033[0m"
+#define GREEN "\033[32m"
+
 #include <string>
 #include <filesystem>
 #include <fstream>
@@ -189,7 +192,16 @@ void todo_list(std::filesystem::path todo_file)
 
     while (getline(todo_reader, todo)) 
     {
-	printf("%d. %s\n", todo_num, todo.c_str());	
+	if (todo.find("✓") != std::string::npos)
+	{
+	    printf(GREEN "%d. %s\n", todo_num, todo.c_str());
+	    printf(RESET);
+	}
+	 
+	else
+	{	    
+	    printf("%d. %s\n", todo_num, todo.c_str());
+	}
 	todo_num++;
     }
     todo_reader.close();
