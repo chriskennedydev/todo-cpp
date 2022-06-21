@@ -7,31 +7,35 @@
 #include <vector>
 #include <iostream>
 
-void add(int todo_length, char** todo, std::filesystem::path todo_file);
-void del(int todo_num, std::filesystem::path todo_file);
-void update(int todo_length, int todo_num, char** updated_todo, std::filesystem::path todo_file);
-void todo_list(std::filesystem::path todo_file);
-void done(int todo_num, std::filesystem::path todo_file);
+void add_todo(int todo_length, char** todo, std::filesystem::path todo_file);
+void del_todo(int todo_num, std::filesystem::path todo_file);
+void update_todo(int todo_length, int todo_num, char** update_todod_todo, std::filesystem::path todo_file);
+void list_todos(std::filesystem::path todo_file);
+void complete_todo(int todo_num, std::filesystem::path todo_file);
 void usage();
 
 int main(int argc, char** argv) 
 {
     if (argc == 1)
     {
-	printf("Need at least one argument!\n");
-	return 1;
+		printf("Need at least one argument!\n");
+		return 1;
     }
 
-    std::string home = getenv("HOME");
+	#if defined(WIN32) || defined(_WIN32)
+		std::string home = getenv("USERPROFILE");
+	#else
+		std::string home = getenv("HOME");
+	#endif
     std::string todo_dir = ".todo";
     std::string todo_f = "todo";
     std::filesystem::path work_dir = home;
     // build the path
     work_dir /= todo_dir;
     if (!std::filesystem::exists(work_dir))
-	std::filesystem::create_directory(work_dir);
+		std::filesystem::create_directory(work_dir);
     
-    // add file to path
+    // add_todo file to path
     work_dir /= todo_f;
 
     // convert first arg to string for compare
@@ -39,44 +43,44 @@ int main(int argc, char** argv)
 
     if (cmd == "add")
     {
-	add(argc, argv, work_dir);
+		add_todo(argc, argv, work_dir);
     }
     else if (cmd == "list") 
     {
-	printf("Todo List\n");
-	printf("---------\n");
-	todo_list(work_dir);
+		printf("Todo List\n");
+		printf("---------\n");
+		list_todos(work_dir);
     }
     else if (cmd == "del")
     {
-	char *int_conversion = argv[2];
-	char *end_ptr;
-	unsigned int todo_num = strtol(int_conversion, &end_ptr, 0);
-	del(todo_num, work_dir);
+		char *int_conversion = argv[2];
+		char *end_ptr;
+		unsigned int todo_num = strtol(int_conversion, &end_ptr, 0);
+		del_todo(todo_num, work_dir);
     }
     else if (cmd == "update") 
     {
-	char *int_conversion = argv[2];
-	char *end_ptr;
-	int todo_num = strtol(int_conversion, &end_ptr, 0);
-	update(argc, todo_num, argv, work_dir);
+		char *int_conversion = argv[2];
+		char *end_ptr;
+		int todo_num = strtol(int_conversion, &end_ptr, 0);
+		update_todo(argc, todo_num, argv, work_dir);
     }
     else if (cmd == "done")
     {
-	char *int_conversion = argv[2];
-	char *end_ptr;
-	int todo_num = strtol(int_conversion, &end_ptr, 0);
-	done(todo_num, work_dir);
+		char *int_conversion = argv[2];
+		char *end_ptr;
+		int todo_num = strtol(int_conversion, &end_ptr, 0);
+		complete_todo(todo_num, work_dir);
 	
     }
     else
     {
-	usage();
+		usage();
     }
 }
 
 
-void add(int todo_length, char** todo, std::filesystem::path todo_file)
+void add_todo(int todo_length, char** todo, std::filesystem::path todo_file)
 {
     std::ofstream todo_writer;
     todo_writer.open(todo_file, std::ios::app);
@@ -84,8 +88,8 @@ void add(int todo_length, char** todo, std::filesystem::path todo_file)
     std::string full_todo = "";
     for (int i = 2; i < todo_length; i++) 
     {
-	full_todo += todo[i];
-	full_todo += " ";
+		full_todo += todo[i];
+		full_todo += " ";
     }
 
     todo_writer << full_todo << "\n";
@@ -93,7 +97,7 @@ void add(int todo_length, char** todo, std::filesystem::path todo_file)
 
 }
 
-void del(int todo_num, std::filesystem::path todo_file)
+void del_todo(int todo_num, std::filesystem::path todo_file)
 {
     std::vector<std::string> todos;
     std::ifstream todo_reader(todo_file, std::ifstream::in);
@@ -102,9 +106,9 @@ void del(int todo_num, std::filesystem::path todo_file)
 
     while (getline(todo_reader, todo))
     {
-	if (todo_index != todo_num)
-	    todos.push_back(todo);
-	todo_index++;
+		if (todo_index != todo_num)
+			todos.push_back(todo);
+		todo_index++;
     }
     todo_reader.close();
 	
@@ -112,12 +116,12 @@ void del(int todo_num, std::filesystem::path todo_file)
     todo_writer.open(todo_file);
     for (std::string todo : todos)
     {
-	todo_writer << todo << "\n"; 
+		todo_writer << todo << "\n"; 
     }
     todo_writer.close();
 }
 
-void update(int todo_length, int todo_num, char** updated_todo, std::filesystem::path todo_file) 
+void update_todo(int todo_length, int todo_num, char** update_todod_todo, std::filesystem::path todo_file) 
 {
     std::vector<std::string> todos;
     std::ifstream todo_reader(todo_file, std::ifstream::in);
@@ -127,17 +131,17 @@ void update(int todo_length, int todo_num, char** updated_todo, std::filesystem:
 
     for (int i = 3; i < todo_length; i++) 
     {
-	full_todo += updated_todo[i];
-	full_todo += " ";
+		full_todo += update_todod_todo[i];
+		full_todo += " ";
     }
 
     while (getline(todo_reader, todo)) 
     {
-	if (todo_index == todo_num)
-	    todos.push_back(full_todo);
-	else
-	    todos.push_back(todo);
-	todo_index++;
+		if (todo_index == todo_num)
+			todos.push_back(full_todo);
+		else
+			todos.push_back(todo);
+		todo_index++;
     }
 
     todo_reader.close();
@@ -147,12 +151,12 @@ void update(int todo_length, int todo_num, char** updated_todo, std::filesystem:
 
     for (std::string todo : todos)
     {
-	todo_writer << todo << std::endl;
+		todo_writer << todo << std::endl;
     }
     todo_writer.close();
 }
 
-void done(int todo_num, std::filesystem::path todo_file)
+void complete_todo(int todo_num, std::filesystem::path todo_file)
 {
     std::vector<std::string> todos;
     std::string todo;
@@ -161,16 +165,16 @@ void done(int todo_num, std::filesystem::path todo_file)
 
     while (getline(todo_reader, todo))
     {
-	if (todo_index == todo_num)
+		if (todo_index == todo_num)
 	{
-	    todo += "✓";
+	    todo += "+";
 	    todos.push_back(todo);
 	}
-	else
-	{
-	    todos.push_back(todo);
-	}
-	todo_index++;
+		else
+		{
+			todos.push_back(todo);
+		}
+		todo_index++;
     }
     todo_reader.close();
 
@@ -179,12 +183,12 @@ void done(int todo_num, std::filesystem::path todo_file)
 
     for (std::string todo : todos)
     {
-	todo_writer << todo << "\n";
+		todo_writer << todo << "\n";
     }
     todo_writer.close();
 }
 
-void todo_list(std::filesystem::path todo_file) 
+void list_todos(std::filesystem::path todo_file) 
 {
     std::ifstream todo_reader(todo_file, std::ifstream::in);
     std::string todo;
@@ -192,17 +196,17 @@ void todo_list(std::filesystem::path todo_file)
 
     while (getline(todo_reader, todo)) 
     {
-	if (todo.find("✓") != std::string::npos)
-	{
-	    printf(GREEN "%d. %s\n", todo_num, todo.c_str());
-	    printf(RESET);
-	}
+		if (todo.find(" +") != std::string::npos)
+		{
+			printf(GREEN "%d. %s\n", todo_num, todo.c_str());
+			printf(RESET);
+		}
 	 
-	else
-	{	    
-	    printf("%d. %s\n", todo_num, todo.c_str());
-	}
-	todo_num++;
+		else
+		{	    
+			printf("%d. %s\n", todo_num, todo.c_str());
+		}
+		todo_num++;
     }
     todo_reader.close();
 }
@@ -210,9 +214,10 @@ void todo_list(std::filesystem::path todo_file)
 void usage()
 {
     printf("usage: todo cmd arg(s)\n");
-    printf("cmd: add | del | update | list\n");
-    printf("add: todo add <my todo to add>\n");
+    printf("cmd: add | del | update | done | list\n");
+    printf("add: todo add <todo>\n");
     printf("del: todo del <todo's number>\n");
+	printf("done: todo done <todo's number>\n");
     printf("update: todo update <todo's number> <updated todo>\n");
     printf("list: todo list\n");
 }
